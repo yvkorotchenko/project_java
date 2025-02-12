@@ -27,18 +27,19 @@ jobs:
         run: |
           docker build -t ghcr.io/${{ github.actor }}/my-java-app:${{ github.sha }} .
           
-          # Витягуємо JAR без створення нового контейнера
+      # Витягуємо JAR без створення нового контейнера
           container_id=$(docker create ghcr.io/${{ github.actor }}/my-java-app:${{ github.sha }})
-          docker cp $container_id:/app/target/helloworld-1.0-SNAPSHOT.jar ./helloworld.jar
-          docker rm $container_id
+          docker exec $container_id ls -lah /app/target
+#          docker cp $container_id:/app/target/helloworld-1.0-SNAPSHOT.jar ./helloworld.jar
+#          docker rm $container_id
 
       # Крок 4: Публікація Docker образу в GitHub Container Registry
       - name: Push Docker image
         run: docker push ghcr.io/${{ github.actor }}/my-java-app:${{ github.sha }}
 
       # Крок 5: Збереження зібраного JAR файлу як артефакт
-      - name: Upload JAR artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: helloworld-jar
-          path: target/helloworld-1.0-SNAPSHOT.jar
+#      - name: Upload JAR artifact
+#        uses: actions/upload-artifact@v4
+#        with:
+#          name: helloworld-jar
+#          path: target/helloworld-1.0-SNAPSHOT.jar
