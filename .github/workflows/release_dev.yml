@@ -25,7 +25,12 @@ jobs:
       # Крок 3: Створення Docker образу
       - name: Build Docker image
         run: |
-          docker build --target build --output type=local,dest=./output -t ghcr.io/${{ github.actor }}/my-java-app:${{ github.sha }} .
+          docker build -t ghcr.io/${{ github.actor }}/my-java-app:${{ github.sha }} .
+          
+          # Витягуємо JAR без створення нового контейнера
+          container_id=$(docker create ghcr.io/${{ github.actor }}/my-java-app:${{ github.sha }})
+          docker cp $container_id:/app/target/helloworld-1.0-SNAPSHOT.jar ./helloworld.jar
+          docker rm $container_id
 
       # Крок 4: Публікація Docker образу в GitHub Container Registry
       - name: Push Docker image
