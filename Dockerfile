@@ -25,5 +25,6 @@ WORKDIR /app
 # Копіюємо зібраний JAR-файл з попереднього контейнера
 COPY --from=build /app/target/helloworld-1.0-SNAPSHOT.jar /app/app.jar
 
+EXPOSE 8080
 # Вказуємо команду для запуску застосунку
 CMD ["java", "-jar", "app.jar"]
